@@ -44,10 +44,10 @@ requestForm.addEventListener("submit", function(event) {
     // Extract request details from the form
     const location = document.getElementById("location").value;
     const bloodGroup = document.getElementById("bloodGroup").value;
-
+    const email = document.getElementById("emailId").value;
     // Create a new blood request object
     const request = {
-        userId: userId,
+        email: email,
         location: location,
         bloodGroup: bloodGroup,
         // Add more details as needed
