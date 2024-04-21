@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+import { getDatabase, ref, push, set, child, onValue } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
 
 const appSettings = {
     databaseURL: "https://raktadatra-3056b-default-rtdb.asia-southeast1.firebasedatabase.app/"
@@ -8,8 +8,10 @@ const appSettings = {
 const app = initializeApp(appSettings);
 const database = getDatabase(app);
 const userRef = ref(database, "users");
+const userRef2 = ref(database, "requests");
 
 const signupForm = document.getElementById("signup-form");
+// const appointmentForm = document.getElementById("appointment-form");
 
 signupForm.addEventListener("submit", function(event) {
     event.preventDefault(); // Prevent form submission
@@ -22,6 +24,7 @@ signupForm.addEventListener("submit", function(event) {
     const type = document.getElementById("person").value;
     const bloodGroup = document.getElementById("bloodgrp").value;
     const password = document.getElementById("password").value;
+    const location = document.getElementById("location").value;
 
     const userData = {
         name: name,
@@ -31,20 +34,21 @@ signupForm.addEventListener("submit", function(event) {
         date: date,
         type: type,
         bloodGroup: bloodGroup,
-        password: password
+        password: password,
+        location: location
     };
+
+    window.userPass = password;
+    window.userEmail = email;
 
     // Pushing the user data to the Firebase database
     push(userRef, userData)
-        .then((snapshot) => {
-            // Data has been successfully added to the database
-            window.userKey = snapshot.key; // Access the key from the snapshot
-            console.log(userKey);
-            window.userId = snapshot.key; // Set userId to the key of the newly added user
+        .then(() => {
             alert("Thanks for registering yourself");
-            if (userData.type === "Donor") {
+            if(userData.type === "Donor") {
                 window.location.href = "donor.html";
-            } else {
+            }
+            else {
                 window.location.href = "patient.html";
             }
         })
